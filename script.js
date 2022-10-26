@@ -86,7 +86,7 @@ console.log(z === window.z); // false
 */
 
 /*
-// This keyword
+// ----------------------SECTION THIS KEYWORD---------------------
 
 // console.log(this); // in the global scope is simply the window object
 
@@ -186,3 +186,70 @@ f(); // TypeError. "this" will become undefined. Can't read year of indefined (i
 //   return a + b; // Arrow function does't arguments keyword
 // };
 // addArrow(2, 5); // Ref error
+
+// --------------------SECTION Primitivies vs. Objects
+/*
+let age = 30;
+let oldAge = age;
+age = 31;
+console.log(age); // 31
+console.log(oldAge); // 30
+
+const me = {
+  name: 'Dmitriy',
+  age: 30,
+};
+
+const friend = me;
+friend.age = 27;
+console.log('Friend', friend); // 27
+console.log('Me', me); // 27
+*/
+
+//Primitivies
+let lastName = 'Williams';
+let oldLastName = lastName;
+lastName = 'Davis';
+console.log(lastName, oldLastName); // Davis Williams. It's because each promitive value will simply be saved into it's own piece of memory in the stack
+
+//Objects (reference types)
+const jessica = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
+};
+
+const marriedJessica = jessica; // We just copying the reference, which will then point to the same object
+marriedJessica.lastName = 'Davis';
+console.log('Before marriage', jessica); // Jessica Davis
+console.log('After marriage', marriedJessica); // Jessica Davis
+// It happend because when we attempted to copy the original Jessica object it did in fact not create a new object in the heap. Both two variables point to exactly the same memory address in the heap, because in the stack, they both hold the same memory address reference
+
+//marriedJessica = {}; // TypeError because will be stored at a different position in memory. If we declare with let, then we could do this, what we have here (with const is it no allowed)
+
+//Copying objects
+
+const jessica2 = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
+  family: ['Alice', 'Bob'],
+};
+
+// Shallow copy
+
+const jessicaCopy = Object.assign({}, jessica2); // Use this method for copying objects (new object created in the heap)
+// Object.assigned works only at the first level (object inside object - doesn't work). Create a "shallow" copy, not a deep clone
+jessicaCopy.lastName = 'Davis';
+
+/*
+console.log('Before marriage', jessica2); // Jessica Williams
+console.log('After marriage', jessicaCopy); // Jessica Davis
+*/
+
+jessicaCopy.family.push('Mary');
+jessicaCopy.family.push('John');
+
+console.log('Before marriage', jessica2); // Jessica Williams ... ['Alice', 'Bob', 'Mary', 'John']
+console.log('After marriage', jessicaCopy); // Jessica Davis ... ['Alice', 'Bob', 'Mary', 'John']
+// Both objects "jessica2" and "jessicaCopy" have a property called "family" which points at the same objects in a memory heap (array). If we change array it's also gonna be changed in the other one.
