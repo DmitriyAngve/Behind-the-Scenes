@@ -65,7 +65,7 @@ const addExpr = function (a, b) {
 
 const addArrow = (a, b) => a + b; // similar to the example above
 
-//Example (Pitch Fall of the Hoisting)
+//Example (Pitfall of the Hoisting)
 // This example demonstrates why you shouldn't use var. All products in shoppingCart will deleted
 console.log(undefined);
 if (!numProducts) deleteShoppingCart();
@@ -127,3 +127,62 @@ const f = dmitriy.calcAge; // copy method to const f (this is the function)
 
 f(); // TypeError. "this" will become undefined. Can't read year of indefined (in function caclAge it looks like this: caclAge: f {cl(undefined); cl(2037 - undefined.year)}). f function call is not regular function call, no attached to any object, there is no owner of "f" function
 */
+
+// var firstName = 'Matilda'; // in a call "dmitriy.greet()" we see "Hey Matilda", because var assigned firstName to the global object
+
+// -----------------------SECTION--------------------------
+// const dmitriy = {
+//   firstName: 'Dmitriy',
+//   year: 1988,
+//   calcAge: function () {
+//     // console.log(this);
+//     console.log(2037 - this.year);
+
+//     // Solution One
+//     //   const self = this; // self or that
+//     //   const isMillenial = function () {
+//     //     console.log(self);
+//     //     console.log(self.year >= 1981 && self.year <= 1996);
+//     //   };
+//     //   // We'll see result (true), because "self" is defined, and it is defined as this
+//     //   isMillenial();
+//     // },
+
+//     // Solution Two
+//     const isMillenial = () => {
+//       console.log(this);
+//       console.log(this.year >= 1981 && this.year <= 1996);
+//     };
+//     isMillenial();
+//     // It's worked because the arrow function uses the this keyword from its parent scope ( this keyword - "dmitriy")
+//   },
+
+//   greet: () => {
+//     console.log(this);
+//     console.log(`Hey ${this.firstName}`);
+//   }, // DON'T USE ARROW FUNCTION as a method!
+//   /*
+//   greet: function () {
+//     console.log(this);
+//     console.log(`Hey ${this.firstName}`);
+//   }, // We'll se "Hey Dmitriy"
+//   */
+// };
+
+// dmitriy.greet(); // "Hey undefined". Arrow function does't get its own this keyword. Parent scope of greet method is the global scope (in global scope this.firsName - undefined)
+// dmitriy.calcAge();
+
+// // Arguments keyword
+// const addExpr = function (a, b) {
+//   console.log(arguments); // arguments keyword
+//   return a + b;
+// };
+
+// addExpr(2, 5);
+// addExpr(2, 5, 8, 12); // Let's loop through this array. Add all the number together
+
+// var addArrow = (a, b) => {
+//   console.log(arguments);
+//   return a + b; // Arrow function does't arguments keyword
+// };
+// addArrow(2, 5); // Ref error
