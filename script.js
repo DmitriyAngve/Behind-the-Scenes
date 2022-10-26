@@ -38,6 +38,7 @@ calcAge(1988);
 // printAge(); // Error printAge is not define - not found in scope
 */
 
+/*
 //Variables
 console.log(me); // udefined because var hoisted to the value of undefined
 //console.log(job); // Ref error. "job" variable is still in TDZ (TDZ for variable declare const or let start from the beginning of the current scope)
@@ -47,7 +48,7 @@ var me = 'Dmitriy';
 let job = 'student';
 const year = 1988;
 
-/*
+
 //Functions
 console.log(addDecl(2, 3)); // result (5). We were able to call the function declaration before it was actually defined here in the code
 
@@ -84,4 +85,45 @@ console.log(y === window.y); // false
 console.log(z === window.z); // false
 */
 
+/*
 // This keyword
+
+// console.log(this); // in the global scope is simply the window object
+
+//Function declaration
+const calcAge = function (birthYear) {
+  console.log(2037 - birthYear);
+  console.log(this);
+};
+calcAge(1988); // undefined (strict mod)
+
+//Arrow
+const calcAgeArrow = birthYear => {
+  console.log(2037 - birthYear);
+  // console.log(this);
+};
+calcAgeArrow(1980); // window object (arrow function does not have its own "this")
+
+//Function expression
+const dmitriy = {
+  year: 1988,
+  calcAge: function () {
+    console.log(this); // nevermind where "this" keyword is located, matters who points to
+
+    // when we have a method call, this insight of the method will be the object that is calling the method ("dmitriy")
+    console.log(2037 - this.year); // this.year = dmitriy.year
+  },
+};
+dmitriy.calcAge(); //"dmitriy" basically the owner of the method
+
+const matilda = {
+  year: 2017,
+};
+
+matilda.calcAge = dmitriy.calcAge; // we copy calcAge method from dmitriy to matilda
+matilda.calcAge(); // this always point the object that is calling the method (we see 2037 - 2017 = 20)
+
+const f = dmitriy.calcAge; // copy method to const f (this is the function)
+
+f(); // TypeError. "this" will become undefined. Can't read year of indefined (in function caclAge it looks like this: caclAge: f {cl(undefined); cl(2037 - undefined.year)}). f function call is not regular function call, no attached to any object, there is no owner of "f" function
+*/
